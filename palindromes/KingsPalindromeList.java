@@ -250,13 +250,14 @@ class KingsPalindromeList {
 
     long[] computeLargestMagicSet(long[] fixedList) {
         long largestX = getXOfLargestMagicSet(fixedList);
+        long largestXDigitsSize = countDigits(largestX);
         int largestMagicSetSize = getLargestMagicSetSize(fixedList);
         long[] largestMagicSet = new long[largestMagicSetSize];
 
         int currentIndex = 0;
         long currentNumber = largestX;
-
-        for(int i = 0; i <= Math.floorDiv(largestX, 2); i++) {
+        
+        for(int i = 0; i <= Math.floorDiv(largestXDigitsSize, 2); i++) {
             if (currentIndex >= largestMagicSetSize) {
                 break;
             }
@@ -265,6 +266,7 @@ class KingsPalindromeList {
 
             if (currentNumberIndex != -1) {
                 largestMagicSet[currentIndex] = currentNumber;
+                currentIndex++;
             }
 
             currentNumber = shaveNumber(currentNumber);
