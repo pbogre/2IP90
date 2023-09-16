@@ -6,6 +6,7 @@ import java.util.Scanner;
  * 
  * Usage:
  * TODO: Documentation
+ * (define what X refers to in methods  / variables)
  * 
  * END TODO
  * 
@@ -16,6 +17,7 @@ import java.util.Scanner;
  * 
  */
 class KingsPalindromeList {
+
     Scanner scanner = new Scanner(System.in);
 
     /**
@@ -27,12 +29,13 @@ class KingsPalindromeList {
      *
      */
     long[] getInput() {
+
         long task = scanner.nextLong();
         int listSize = scanner.nextInt();
         long[] input = new long[listSize + 1];
         input[0] = task;
 
-        for(int i = 0; i < listSize; i++) {
+        for (int i = 0; i < listSize; i++) {
             input[i + 1] = scanner.nextLong();
         }
 
@@ -48,6 +51,7 @@ class KingsPalindromeList {
      *
      */
     int countDigits(long number) {
+
         int count = 0;
 
         // note that we do not need to
@@ -71,6 +75,7 @@ class KingsPalindromeList {
      *
      */
     int[] convertLongToArray(long number) {
+
         int count = countDigits(number);
         int[] digits = new int[count];
 
@@ -101,6 +106,7 @@ class KingsPalindromeList {
      *
      */
     long convertArrayToLong(int[] digits) {
+
         long number = 0;
 
         // For each digit append to number
@@ -111,7 +117,7 @@ class KingsPalindromeList {
         //
         // Example:
         // 1234 = 1000 + 200 + 30 + 4
-        for(int i = 0; i < digits.length; i++) {
+        for (int i = 0; i < digits.length; i++) {
             long magnitude = (long)Math.pow(10, digits.length - 1 - i);
             number += digits[i] * magnitude;
         }
@@ -121,8 +127,8 @@ class KingsPalindromeList {
 
     /**
      *
-     * Fix a corrupt number in the list,
-     * as per the King's request
+     * Gets next palindrome greater than or equal to 
+     * given number (expressed as array of digits)
      *
      * @param digits An array of digits
      * @return The next highest palindrome, or the 
@@ -130,6 +136,7 @@ class KingsPalindromeList {
      *
      */
     long getNextPalindrome(int[] digits){
+
         if (digits.length == 1) {
             return digits[0];
         }
@@ -181,7 +188,17 @@ class KingsPalindromeList {
         return nearestPalindrome;
     }
 
+    /**
+     *
+     * Gets an element's index in given array
+     *
+     * @param element Long element you are looking for
+     * @param array Long array to search from
+     * @return Index of element in array, or -1 if it is not in array
+     *
+     */
     int getElementIndex(long element, long[] array) {
+
         for (int i = 0; i < array.length; i++) {
             if (array[i] == element) {
                 return i;
@@ -191,23 +208,45 @@ class KingsPalindromeList {
         return -1;
     }
 
+    /**
+     *
+     * Mathematically removes first and last digit from number
+     *
+     * @param number Long number to shave
+     * @return Given long number without first and last digits
+     *
+     */
     long shaveNumber(long number) {
-        number %= (int) Math.pow(10, (int) Math.log10(number));
+
+        // Remove first digit 
+        number %= (int)Math.pow(10, (int)Math.log10(number));
+        // Remove last digit
         number -= number % 10;
         number /= 10;
+
         return number;
     }
 
-    int getLargestMagicSetSize(long[] fixedList) {
+    /**
+     *
+     * Gets size of largest magic set in given list
+     * of palindromes
+     *
+     * @param array Long array of palindromes
+     * @return Size of largest magic set found in given array
+     *
+     */
+    int getLargestMagicSetSize(long[] array) {
+
         int largestMagicSetSize = 0;
 
-        for (int i = 0; i < fixedList.length; i++) {
-            long currentNumber = fixedList[i];
+        for (int i = 0; i < array.length; i++) {
+            long currentNumber = array[i];
             int currentMagicSetSize = 0;
             int currentNumberSize = countDigits(currentNumber);
 
             for (int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
-                if (getElementIndex(currentNumber, fixedList) != -1) {
+                if (getElementIndex(currentNumber, array) != -1) {
                     currentMagicSetSize++;
                 }
 
@@ -222,17 +261,27 @@ class KingsPalindromeList {
         return largestMagicSetSize;
     }
 
-    long getXOfLargestMagicSet(long[] fixedList) {
+    /**
+     *
+     * Gets largest palindrome in largest magic set
+     * of the given array
+     *
+     * @param array Long array of palindromes
+     * @return Largest palindrome of largest magic set as type long
+     *
+     */
+    long getXOfLargestMagicSet(long[] array) {
+
         long largestX = 0;
         int largestMagicSetSize = 0;
 
-        for (int i = 0; i < fixedList.length; i++) {
-            long currentNumber = fixedList[i];
+        for (int i = 0; i < array.length; i++) {
+            long currentNumber = array[i];
             int currentMagicSetSize = 0;
             int currentNumberSize = countDigits(currentNumber);
 
             for (int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
-                if (getElementIndex(currentNumber, fixedList) != -1) {
+                if (getElementIndex(currentNumber, array) != -1) {
                     currentMagicSetSize++;
                 }
 
@@ -241,28 +290,57 @@ class KingsPalindromeList {
 
             if (currentMagicSetSize > largestMagicSetSize) {
                 largestMagicSetSize = currentMagicSetSize;
-                largestX = fixedList[i];
+                largestX = array[i];
             }
         }
          
         return largestX;
     }
 
-    long[] computeLargestMagicSet(long[] fixedList) {
-        long largestX = getXOfLargestMagicSet(fixedList);
-        long largestXDigitsSize = countDigits(largestX);
-        int largestMagicSetSize = getLargestMagicSetSize(fixedList);
+    /**
+     *
+     * Gets the contents of the largest magic set 
+     * found in the given array
+     *
+     * @param array Long array of palindromes
+     * @return Long array consisting of elements in 
+     * largest magic set found, or largest element 
+     * in array if no magic set is found
+     *
+     */
+    long[] getLargestMagicSet(long[] array) {
+
+        long largestX = getXOfLargestMagicSet(array);
+        long largestXSize = countDigits(largestX);
+
+        int largestMagicSetSize = getLargestMagicSetSize(array);
         long[] largestMagicSet = new long[largestMagicSetSize];
+
+        // If the largest magic set consists only of 1 element, 
+        // then there is no magic set
+        // In that case return only the largest element in the array
+        if (largestMagicSetSize == 1) {
+            long largestElement = 0;
+
+            for (long element : array) {
+                if (element > largestElement) {
+                    largestElement = element;
+                }
+            }
+
+            largestMagicSet[0] = largestElement;
+            return largestMagicSet;
+        }
 
         int currentIndex = 0;
         long currentNumber = largestX;
         
-        for(int i = 0; i <= Math.floorDiv(largestXDigitsSize, 2); i++) {
+        for (int i = 0; i <= Math.floorDiv(largestXSize, 2); i++) {
             if (currentIndex >= largestMagicSetSize) {
                 break;
             }
 
-            int currentNumberIndex = getElementIndex(currentNumber, fixedList);
+            int currentNumberIndex = getElementIndex(currentNumber, array);
 
             if (currentNumberIndex != -1) {
                 largestMagicSet[currentIndex] = currentNumber;
@@ -275,8 +353,8 @@ class KingsPalindromeList {
         return largestMagicSet;
     }
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
+
         KingsPalindromeList palindrome = new KingsPalindromeList();
 
         long[] input = palindrome.getInput();
@@ -288,25 +366,46 @@ class KingsPalindromeList {
         // Fill list with all elements in 
         // input array except first one, 
         // which is the task number
-        for(int i = 0; i < listSize; i++) {
+        for (int i = 0; i < listSize; i++) {
             list[i] = input[i + 1];
         }
 
+        // No need to check task here because 
+        // we need correct list regardless of task
         long[] fixedList = new long[listSize];
 
         for (int i = 0; i < listSize; i++) {
             int[] digits = palindrome.convertLongToArray(list[i]);
             long fixedPalindrome = palindrome.getNextPalindrome(digits);
             fixedList[i] = fixedPalindrome;
-            //System.out.print(fixedPalindrome + " ");
+
+            // Output done inside correcting loop for better performance
+            if (task == 1) {
+                //TODO are trailing spaces fine?
+                System.out.print(fixedPalindrome + " ");
+            }
         }
 
-       //int largestMagicSetSize = palindrome.getLargestMagicSetSize(fixedList);
-       //System.out.println(largestMagicSetSize);
+        if (task == 1) {
+            return;
+        }
 
-        long[] largestMagicSet = palindrome.computeLargestMagicSet(fixedList);
-        for (long number : largestMagicSet) {
-            System.out.print(number + " ");
+        if (task == 2) {
+            int largestMagicSetSize = palindrome.getLargestMagicSetSize(fixedList);
+            System.out.println(largestMagicSetSize);
+            return;
+        }
+
+        // If the program got here, the task has to be 3 (assuming correct input)
+        // Therefore no need to check if task is 3
+
+        long[] largestMagicSet = palindrome.getLargestMagicSet(fixedList);
+
+        // Backward loop because, by nature of magic sets, 
+        // the largestMagicSet array will always be sorted in 
+        // descending order, but we want to print it in ascending
+        for (int i = largestMagicSet.length - 1; i >= 0; i--) {
+            System.out.print(largestMagicSet[i] + " ");
         }
     }
 }
