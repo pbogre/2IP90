@@ -181,9 +181,51 @@ class KingsPalindromeList {
         return nearestPalindrome;
     }
 
+    boolean checkElementInArray(long element, long[] array) {
+        for (long item: array) {
+            if (item == element) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    long shaveNumber(long number) {
+        number %= (int) Math.pow(10, (int) Math.log10(number));
+        number -= number % 10;
+        number /= 10;
+        return number;
+    }
+
+    int getLargestMagicSetSize(long[] fixedList) {
+        int largestMagicSetSize = 0;
+
+        for(int i = 0; i < fixedList.length; i++) {
+            long currentNumber = fixedList[i];
+            int currentMagicSetSize = 0;
+            int currentNumberSize = countDigits(currentNumber);
+
+            for(int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
+                if (checkElementInArray(currentNumber, fixedList)) {
+                    currentMagicSetSize++;
+                }
+
+                currentNumber = shaveNumber(currentNumber);
+            }
+
+            if (currentMagicSetSize > largestMagicSetSize) {
+                largestMagicSetSize = currentMagicSetSize;
+            }
+        }
+
+        return largestMagicSetSize;
+    }
+
     public static void main(String[] args) 
     {
         KingsPalindromeList palindrome = new KingsPalindromeList();
+
         long[] input = palindrome.getInput();
         int task = (int)input[0];
 
@@ -197,10 +239,16 @@ class KingsPalindromeList {
             list[i] = input[i + 1];
         }
 
-        for (long number : list) {
-            int[] digits = palindrome.convertLongToArray(number);
+        long[] fixedList = new long[listSize];
+
+        for (int i = 0; i < listSize; i++) {
+            int[] digits = palindrome.convertLongToArray(list[i]);
             long fixedPalindrome = palindrome.getNextPalindrome(digits);
-            System.out.print(fixedPalindrome + " ");
+            fixedList[i] = fixedPalindrome;
+            //System.out.print(fixedPalindrome + " ");
         }
+
+       int largestMagicSetSize = palindrome.getLargestMagicSetSize(fixedList);
+       System.out.println(largestMagicSetSize);
     }
 }
