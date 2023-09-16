@@ -181,14 +181,14 @@ class KingsPalindromeList {
         return nearestPalindrome;
     }
 
-    boolean checkElementInArray(long element, long[] array) {
-        for (long item: array) {
-            if (item == element) {
-                return true;
+    int getElementIndex(long element, long[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                return i;
             }
         }
 
-        return false;
+        return -1;
     }
 
     long shaveNumber(long number) {
@@ -201,13 +201,13 @@ class KingsPalindromeList {
     int getLargestMagicSetSize(long[] fixedList) {
         int largestMagicSetSize = 0;
 
-        for(int i = 0; i < fixedList.length; i++) {
+        for (int i = 0; i < fixedList.length; i++) {
             long currentNumber = fixedList[i];
             int currentMagicSetSize = 0;
             int currentNumberSize = countDigits(currentNumber);
 
-            for(int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
-                if (checkElementInArray(currentNumber, fixedList)) {
+            for (int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
+                if (getElementIndex(currentNumber, fixedList) != -1) {
                     currentMagicSetSize++;
                 }
 
@@ -220,6 +220,57 @@ class KingsPalindromeList {
         }
 
         return largestMagicSetSize;
+    }
+
+    long getXOfLargestMagicSet(long[] fixedList) {
+        long largestX = 0;
+        int largestMagicSetSize = 0;
+
+        for (int i = 0; i < fixedList.length; i++) {
+            long currentNumber = fixedList[i];
+            int currentMagicSetSize = 0;
+            int currentNumberSize = countDigits(currentNumber);
+
+            for (int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
+                if (getElementIndex(currentNumber, fixedList) != -1) {
+                    currentMagicSetSize++;
+                }
+
+                currentNumber = shaveNumber(currentNumber);
+            }
+
+            if (currentMagicSetSize > largestMagicSetSize) {
+                largestMagicSetSize = currentMagicSetSize;
+                largestX = fixedList[i];
+            }
+        }
+         
+        return largestX;
+    }
+
+    long[] computeLargestMagicSet(long[] fixedList) {
+        long largestX = getXOfLargestMagicSet(fixedList);
+        int largestMagicSetSize = getLargestMagicSetSize(fixedList);
+        long[] largestMagicSet = new long[largestMagicSetSize];
+
+        int currentIndex = 0;
+        long currentNumber = largestX;
+
+        for(int i = 0; i <= Math.floorDiv(largestX, 2); i++) {
+            if (currentIndex >= largestMagicSetSize) {
+                break;
+            }
+
+            int currentNumberIndex = getElementIndex(currentNumber, fixedList);
+
+            if (currentNumberIndex != -1) {
+                largestMagicSet[currentIndex] = currentNumber;
+            }
+
+            currentNumber = shaveNumber(currentNumber);
+        }
+
+        return largestMagicSet;
     }
 
     public static void main(String[] args) 
@@ -248,7 +299,12 @@ class KingsPalindromeList {
             //System.out.print(fixedPalindrome + " ");
         }
 
-       int largestMagicSetSize = palindrome.getLargestMagicSetSize(fixedList);
-       System.out.println(largestMagicSetSize);
+       //int largestMagicSetSize = palindrome.getLargestMagicSetSize(fixedList);
+       //System.out.println(largestMagicSetSize);
+
+        long[] largestMagicSet = palindrome.computeLargestMagicSet(fixedList);
+        for (long number : largestMagicSet) {
+            System.out.print(number + " ");
+        }
     }
 }
