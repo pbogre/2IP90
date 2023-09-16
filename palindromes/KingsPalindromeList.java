@@ -122,13 +122,6 @@ class KingsPalindromeList {
 
     }
 
-    void printArray(int[] digits) {
-        for(int digit: digits) {
-            System.out.print(digit + " ");
-        }
-        System.out.println();
-    }
-
     /**
      *
      * Fix a corrupt number in the list,
