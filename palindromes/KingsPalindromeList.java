@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-import javax.sound.midi.SysexMessage;
-
 /**
  * Reads a list of numbers, and can reconstruct the corresponding list of Palindromes,
  * produce the size of the largest magic set, and the content of that magic set.
@@ -119,7 +117,6 @@ class KingsPalindromeList {
         }
 
         return number;
-
     }
 
     /**
