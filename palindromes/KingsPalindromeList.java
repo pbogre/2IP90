@@ -10,7 +10,7 @@ import java.util.Scanner;
  * END TODO
  * 
  * @author <Damyan Dimov>
- * @ID <ID STUDENT 1>
+ * @ID <1933248>
  * @author Pietro Bonaldo Gregori
  * @ID <ID STUDENT 2>
  * 
