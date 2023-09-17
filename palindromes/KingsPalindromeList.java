@@ -13,7 +13,7 @@ import java.util.Scanner;
  * @author Damyan Dimov
  * @ID <ID STUDENT 1>
  * @author Pietro Bonaldo Gregori
- * @ID <ID STUDENT 2>
+ * @ID 1964542
  * 
  */
 class KingsPalindromeList {
