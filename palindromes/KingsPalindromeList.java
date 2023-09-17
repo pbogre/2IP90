@@ -218,11 +218,13 @@ class KingsPalindromeList {
      */
     long shaveNumber(long number) {
 
-        // Remove first digit 
+        // Remove first digit and all leading zero's
         number %= (int)Math.pow(10, (int)Math.log10(number));
-        // Remove last digit
+        // Remove last digit and all trailing zero's
         number -= number % 10;
-        number /= 10;
+        while (number % 10 == 0) {
+            number /= 10;
+        }
 
         return number;
     }
@@ -242,15 +244,25 @@ class KingsPalindromeList {
 
         for (int i = 0; i < array.length; i++) {
             long currentNumber = array[i];
-            int currentMagicSetSize = 0;
             int currentNumberSize = countDigits(currentNumber);
+            int currentMagicSetSize = 1;
 
-            for (int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
+            while (currentNumberSize > 0) {
+                // we can start by shaving because we know
+                // that the first number will be inside of the
+                // palindrome list
+                // we must check the number size because you
+                // can't shave single digits
+                if (currentNumberSize > 1) {
+                    currentNumber = shaveNumber(currentNumber);
+                    currentNumberSize = countDigits(currentNumber);
+                } else {
+                    break;
+                }
+
                 if (getElementIndex(currentNumber, array) != -1) {
                     currentMagicSetSize++;
                 }
-
-                currentNumber = shaveNumber(currentNumber);
             }
 
             if (currentMagicSetSize > largestMagicSetSize) {
@@ -277,15 +289,25 @@ class KingsPalindromeList {
 
         for (int i = 0; i < array.length; i++) {
             long currentNumber = array[i];
-            int currentMagicSetSize = 0;
             int currentNumberSize = countDigits(currentNumber);
+            int currentMagicSetSize = 0;
 
-            for (int j = 0; j <= Math.floorDiv(currentNumberSize, 2); j++) {
+            while (currentNumberSize > 0) {
+                // we can start by shaving because we know
+                // that the first number will be inside of the
+                // palindrome list
+                // we must check the number size because you
+                // can't shave single digits
+                if (currentNumberSize > 1) {
+                    currentNumber = shaveNumber(currentNumber);
+                    currentNumberSize = countDigits(currentNumber);
+                } else {
+                    break;
+                }
+
                 if (getElementIndex(currentNumber, array) != -1) {
                     currentMagicSetSize++;
                 }
-
-                currentNumber = shaveNumber(currentNumber);
             }
 
             if (currentMagicSetSize > largestMagicSetSize) {
@@ -293,7 +315,7 @@ class KingsPalindromeList {
                 largestX = array[i];
             }
         }
-         
+ 
         return largestX;
     }
 
@@ -311,10 +333,10 @@ class KingsPalindromeList {
     long[] getLargestMagicSet(long[] array) {
 
         long largestX = getXOfLargestMagicSet(array);
-        long largestXSize = countDigits(largestX);
-
         int largestMagicSetSize = getLargestMagicSetSize(array);
         long[] largestMagicSet = new long[largestMagicSetSize];
+
+        largestMagicSet[0] = largestX;
 
         // If the largest magic set consists only of 1 element, 
         // then there is no magic set
@@ -332,22 +354,32 @@ class KingsPalindromeList {
             return largestMagicSet;
         }
 
-        int currentIndex = 0;
+        int currentIndex = 1;
         long currentNumber = largestX;
+        int currentNumberSize = countDigits(currentNumber);
         
-        for (int i = 0; i <= Math.floorDiv(largestXSize, 2); i++) {
+        while (currentNumberSize > 0) {
+            // this check is not required but improves performance
             if (currentIndex >= largestMagicSetSize) {
                 break;
             }
 
-            int currentNumberIndex = getElementIndex(currentNumber, array);
+            // we can start by shaving because we know
+            // that the first number will be inside of the
+            // palindrome list
+            // we must check the number size because you
+            // can't shave single digits
+            if (currentNumberSize > 1) {
+                currentNumber = shaveNumber(currentNumber);
+                currentNumberSize = countDigits(currentNumber);
+            } else {
+                break;
+            }
 
-            if (currentNumberIndex != -1) {
+            if (getElementIndex(currentNumber, array) != -1) {
                 largestMagicSet[currentIndex] = currentNumber;
                 currentIndex++;
             }
-
-            currentNumber = shaveNumber(currentNumber);
         }
 
         return largestMagicSet;
