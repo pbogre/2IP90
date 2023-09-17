@@ -381,8 +381,12 @@ class KingsPalindromeList {
 
             // Output done inside correcting loop for better performance
             if (task == 1) {
-                //TODO are trailing spaces fine?
-                System.out.print(fixedPalindrome + " ");
+                // Avoid trailing spaces
+                if (i < listSize - 1) {
+                    System.out.print(fixedPalindrome + " ");
+                } else {
+                    System.out.print(fixedPalindrome);
+                }
             }
         }
 
@@ -405,7 +409,12 @@ class KingsPalindromeList {
         // the largestMagicSet array will always be sorted in 
         // descending order, but we want to print it in ascending
         for (int i = largestMagicSet.length - 1; i >= 0; i--) {
-            System.out.print(largestMagicSet[i] + " ");
+            // Avoid trailing spaces
+            if (i > 0) {
+                System.out.print(largestMagicSet[i] + " ");
+            } else {
+                System.out.print(largestMagicSet[i]);
+            }
         }
     }
 }
