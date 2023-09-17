@@ -4,11 +4,23 @@ import java.util.Scanner;
  * Reads a list of numbers, and can reconstruct the corresponding list of Palindromes,
  * produce the size of the largest magic set, and the content of that magic set.
  * 
- * Usage:
  * TODO: Documentation
+ * User Manual:
+ * - (input order)
+ * - (input format)
+ * - (output)
+ *
  * (define what X refers to in methods  / variables)
  * 
- * END TODO
+ *
+ * TODO: test cases 
+ * - test case for task 1
+ * - test case for task 2
+ * - test case for task 3
+ * - test case for task 1 with large numbers (type long test)
+ * - test case for task 2 with trailing/leading zeros in number
+ * - test case for task 3 with ?
+ *
  * 
  * @author Damyan Dimov
  * @ID <ID STUDENT 1>
@@ -152,6 +164,8 @@ class KingsPalindromeList {
             rightHalfDigits[i] = digits[middleIndex + i + 1];
         }
 
+        // inverse the left half as that is what will
+        // be put on the right hand side of the "next" palindrome
         int[] inversedLeftHalfDigits = new int[middleIndex];
 
         for (int i = middleIndex - 1; i >= 0; i--) {
@@ -210,10 +224,11 @@ class KingsPalindromeList {
 
     /**
      *
-     * Mathematically removes first and last digit from number
+     * Mathematically removes first and last digit from number,
+     * including leading and trailing zero's
      *
      * @param number Long number to shave
-     * @return Given long number without first and last digits
+     * @return Given long number without first, last, and leading/trailing zero digits
      *
      */
     long shaveNumber(long number) {
@@ -260,6 +275,7 @@ class KingsPalindromeList {
                     break;
                 }
 
+                // if shaved number is in array, increment currentMagicSetSize
                 if (getElementIndex(currentNumber, array) != -1) {
                     currentMagicSetSize++;
                 }
@@ -305,6 +321,7 @@ class KingsPalindromeList {
                     break;
                 }
 
+                // if shaved number is in array, increment currentMagicSetSize
                 if (getElementIndex(currentNumber, array) != -1) {
                     currentMagicSetSize++;
                 }
@@ -340,7 +357,7 @@ class KingsPalindromeList {
 
         // If the largest magic set consists only of 1 element, 
         // then there is no magic set
-        // In that case return only the largest element in the array
+        // In that case return only the largest element in the whole array
         if (largestMagicSetSize == 1) {
             long largestElement = 0;
 
@@ -376,6 +393,8 @@ class KingsPalindromeList {
                 break;
             }
 
+            // if shaved number is in array, add it to largestMagicSet
+            // at location currentIndex, then increment currentIndex
             if (getElementIndex(currentNumber, array) != -1) {
                 largestMagicSet[currentIndex] = currentNumber;
                 currentIndex++;
