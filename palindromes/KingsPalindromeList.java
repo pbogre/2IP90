@@ -337,7 +337,15 @@ class KingsPalindromeList {
                 }
             }
 
+            // set largestX to current X if it is the largest 
+            // magic set yet, otherwise if the current magic set
+            // is equally big as the largest magic set yet, only
+            // set largestX to current X if it is also greater than
+            // the previously found largestX
             if (currentMagicSetSize > largestMagicSetSize) {
+                largestMagicSetSize = currentMagicSetSize;
+                largestX = array[i];
+            } else if (currentMagicSetSize == largestMagicSetSize && array[i] > largestX) {
                 largestMagicSetSize = currentMagicSetSize;
                 largestX = array[i];
             }
