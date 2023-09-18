@@ -6,19 +6,31 @@ import java.util.Scanner;
  * 
  * 
  * User Manual:
- * - The program reads 3 lines of input; the first line selects which task is going to be executed, either 1, 2 or 3; 
- *   The second line is the input which indicates the number list's size that is going to be provided;
- *   And the third and final line provides the list of numbers which need to be manipulated, i.e. task 1 gets the closest greater or equal to
- *   palindrome to each number; task 2 provides the maximum magic set size of palindromes that contain themselves and finally,
- *   task 3 provides the actual magic set, printed in ascending order.
- * - All numbers provided are positive integers and the numbers that need to be manipulated can be 5000 at maximum and have at most 17 digits;
- * - The program prints different outputs depending on the task number selected:
- *   *Task 1: Prints the "fixed" list with actual palindromes;
- *   *Task 2: Prints the largest magic set size i.e. one number;
- *   *Task 3: Prints the elements of the largest magic set in ascending order;
  *
- *   (As stated in the exercises, X is the largest number of the largest magic set given and we will refer to it as such)
- * 
+ * - Input:
+ *   - Task number (1, 2, or 3) 
+ *   - List size (integer) (Between 1 and 50000, inclusive)
+ *   - List of numbers (At most 17 digits per number) (Size as specified in the previous input)
+ *
+ *  - Input Format:
+ *   - Inputs may be separated via whitespace or newline characters
+ *      e.g. 
+ *              1 3
+ *              101 202 303
+ *      e.g.
+ *              3 2 123 4567
+ *      e.g.
+ *              1
+ *              1
+ *              123456
+ * - Output:
+ *   - Task 1: Prints the "fixed" list with actual palindromes;
+ *   - Task 2: Prints the largest magic set size i.e. one number;
+ *   - Task 3: Prints the elements of the largest magic set in ascending order;
+ *
+ * - Definitions:
+ *   Magic Set: Set of palindromes where largest element contains all other palindromes in the set
+ *   X: The largest number of the largest magic set, used in variables/methods
  *
  *
  * - Test case for Task 1:
@@ -26,42 +38,42 @@ import java.util.Scanner;
  *   1
  *   5
  *   241 424 546 654 120
- *   Output: 242 424 555 656 121 (As expected)
+ *   Output: 242 424 555 656 121
  * 
  * - Test case for Task 2:
  *   Input:
  *   2
  *   4
  *   4 242 1224221 6
- *   Output: 3 (As expected)
+ *   Output: 3
  * 
  * - Test case for Task 3:
  *   Input:
  *   3
  *   5
  *   8 179 4718174 847 244
- *   Output: 8 181 4718174 (As expected)
+ *   Output: 8 181 4718174
  * 
  * - Test case for Task 1 with large numbers (type long test)
  *   Input:
  *   1
  *   3
  *   82709456723563412 17890456325563412 67823451784563412
- *   Output: 827094575490728 178904565409871 678234525432876 (As expected) {Long size is 18 digits}
+ *   Output: 827094575490728 178904565409871 678234525432876
  * 
  * - Test case for Task 2 with trailing/leading zeros in number
  *   Input:
  *   2
  *   3
  *   100 200 8
- *   Output: 1 (As expected)
+ *   Output: 1
  * 
  * - Test case for Task 3 with 2 magic sets of the same size
  *   Input:
  *   3
  *   4
  *   1 121 8 181
- *   Output: 8 181 (As expected)
+ *   Output: 8 181
  *
  * 
  * @author Damyan Dimov
