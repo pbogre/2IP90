@@ -1,0 +1,29 @@
+TEST CASE 1:
+motivation  : test task 1
+input       : 1 5 241 424 546 654 120
+Output      : 242 424 555 656 121
+
+TEST CASE 2:
+motivation : test task 2
+input      : 2 4 4 242 1224221 6 
+output     : 3
+
+TEST CASE 3:
+motivation : test task 3
+input      : 3 5 8 179 4718174 847 244
+output     : 8 181 4718174
+
+TEST CASE 4:
+motivation : test large numbers (type long)
+input      : 82709456723563412 17890456325563412 67823451784563412
+output     : 827094575490728 178904565409871 678234525432876
+
+TEST CASE 5:
+motivation : test trailing/leading zero's in numbers
+input      : 2 3 100 200 8
+output     : 1
+
+TEST CASE 6:
+motivation : test with magic sets of same size
+input     : 3 4 1 121 8 181
+output    : 8 181

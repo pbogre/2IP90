@@ -33,51 +33,8 @@ import java.util.Scanner;
  *   X: The largest number of the largest magic set, used in variables/methods
  *
  *
- * - Test case for Task 1:
- *   Input:
- *   1
- *   5
- *   241 424 546 654 120
- *   Output: 242 424 555 656 121
- * 
- * - Test case for Task 2:
- *   Input:
- *   2
- *   4
- *   4 242 1224221 6
- *   Output: 3
- * 
- * - Test case for Task 3:
- *   Input:
- *   3
- *   5
- *   8 179 4718174 847 244
- *   Output: 8 181 4718174
- * 
- * - Test case for Task 1 with large numbers (type long test)
- *   Input:
- *   1
- *   3
- *   82709456723563412 17890456325563412 67823451784563412
- *   Output: 827094575490728 178904565409871 678234525432876
- * 
- * - Test case for Task 2 with trailing/leading zeros in number
- *   Input:
- *   2
- *   3
- *   100 200 8
- *   Output: 1
- * 
- * - Test case for Task 3 with 2 magic sets of the same size
- *   Input:
- *   3
- *   4
- *   1 121 8 181
- *   Output: 8 181
- *
- * 
  * @author Damyan Dimov
- * @ID <1933248>
+ * @ID 1933248
  * @author Pietro Bonaldo Gregori
  * @ID 1964542
  * 
