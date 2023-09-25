@@ -1,28 +1,26 @@
 import java.util.*;
 
 public class MadTrucker {
+
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
 
         int n = scanner.nextInt();
-
         int[] gasCans = new int[n];
         int[] unstoppableLocations = new int[n - 1];
 
-        for(int i = 0; i < n; i++)
-        {
+        for (int i = 0; i < n; i++) {
             gasCans[i] = scanner.nextInt();
         }
 
-        for(int i = 0; i < n - 1; i++)
-        {
+        for (int i = 0; i < n - 1; i++) {
             unstoppableLocations[i] = scanner.nextInt();
         }
 
         scanner.close();
 
         Map<Pair, List<Integer>> memo = new HashMap<>();
-
         List<Integer> result = findValidSequence(n, gasCans, unstoppableLocations, new ArrayList<>(), memo, 0, 0);
 
         if (result != null) {
@@ -34,21 +32,18 @@ public class MadTrucker {
         }
         System.out.println(isValidSequence(gasCans, result, unstoppableLocations));
     }
-    public static Boolean isValidSequence(int[] gasCans, List<Integer> sequence, int[] unstoppableLocations)
-    {
+
+    public static Boolean isValidSequence(int[] gasCans, List<Integer> sequence, int[] unstoppableLocations) {
         int location = 0;
-        boolean exists;
-        for(int n : sequence)
-        {
+        for (int n : sequence) {
             location += gasCans[n];
-            for(int unstoppable : unstoppableLocations)
-            {
-                if(location == unstoppable)
-                {
+            for (int unstoppable : unstoppableLocations) {
+                if (location == unstoppable) {
                     return false;
                 }
             }
         }
+
         return true;
     }
 
