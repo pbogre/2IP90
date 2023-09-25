@@ -51,7 +51,9 @@ public class MadTrucker {
             for (int i = 0; i < result.size() - 1; i++) {
                 System.out.print(result.get(i) + " ");
             }
-            System.out.print(result.getLast());
+
+            int lastIndex = result.size() - 1;
+            System.out.print(result.get(lastIndex));
         }
     }
 
