@@ -1,5 +1,29 @@
 import java.util.*;
 
+/**
+ *
+ * Gives the order in which the mad trucker should use
+ * his gas cans in order to never run out of gas in
+ * a no-stopping area
+ *
+ * User Manual:
+ *
+ * - Input:
+ *   - Number of cans (integer) (n)
+ *   - List of cans' mileages (between 1 and 10000) (size is n)
+ *   - List of points where the trucker cannot stop to refuel (size is n - 1)
+ *
+ * - Output:
+ *   - The indices of the gas cans that the trucker should use, in the order that
+ *   they should use them in
+ *
+ *
+ * @author Damyan Dimov
+ * @ID 1933248
+ * @author Pietro Bonaldo Gregori
+ * @ID 1964542
+ *
+ */
 public class MadTrucker {
 
     public static void main(String[] args) {
@@ -24,13 +48,11 @@ public class MadTrucker {
         List<Integer> result = findValidSequence(n, gasCans, unstoppableLocations, new ArrayList<>(), memo, 0, 0);
 
         if (result != null) {
-            for (int i : result) {
-                System.out.print(i + " ");
+            for (int i = 0; i < result.size() - 1; i++) {
+                System.out.print(result.get(i) + " ");
             }
-        } else {
-            System.out.println("No valid sequence found.");
+            System.out.print(result.getLast());
         }
-        System.out.println(isValidSequence(gasCans, result, unstoppableLocations));
     }
 
     public static Boolean isValidSequence(int[] gasCans, List<Integer> sequence, int[] unstoppableLocations) {
