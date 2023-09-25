@@ -1,4 +1,4 @@
-import java.util.*;
+/*import java.util.*;
 
 public class TruckFuelingOptimized {
     public static void main(String[] args) {
@@ -72,4 +72,4 @@ public class TruckFuelingOptimized {
         return fuelSequence;
     }
 }
-
+*/
