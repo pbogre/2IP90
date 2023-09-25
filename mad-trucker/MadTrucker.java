@@ -55,20 +55,23 @@ public class MadTrucker {
         }
     }
 
-    public static Boolean isValidSequence(int[] gasCans, List<Integer> sequence, int[] unstoppableLocations) {
-        int location = 0;
-        for (int n : sequence) {
-            location += gasCans[n];
-            for (int unstoppable : unstoppableLocations) {
-                if (location == unstoppable) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
+    /**
+     *
+     * Finds the sequence of gas cans that will
+     * result in the mad trucker not running out
+     * of gas in a no-refueling area
+     *
+     * @param n number of gas cans
+     * @param gasCans list of gas cans' mileages
+     * @param unstoppableLocations list of points where the trucker cannot stop
+     * @param result the indices of gas cans that are currently being explored
+     * @param memo the memoization array used for optimization
+     * @param currentIndex index of gas can that is being explored
+     * @param currentLocation kilometers travelled by trucker in current recursion
+     *
+     * @return result the indices of gas cans in the order that the trucker should use them
+     *
+     */
     private static List<Integer> findValidSequence(int n, int[] gasCans, int[] unstoppableLocations, List<Integer> result, Map<Pair, List<Integer>> memo, int currentIndex, int currentLocation) {
         // Base case: All gas cans used
         if (result.size() == n) {
