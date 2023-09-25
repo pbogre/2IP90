@@ -44,6 +44,7 @@ public class MadTrucker {
 
         scanner.close();
 
+        //Map created for Caching/Memoization to store already visited paths and to reduce time complexity
         Map<Pair, List<Integer>> memo = new HashMap<>();
         List<Integer> result = findValidSequence(n, gasCans, unstoppableLocations, new ArrayList<>(), memo, 0, 0);
 
@@ -75,7 +76,7 @@ public class MadTrucker {
      *
      */
     private static List<Integer> findValidSequence(int n, int[] gasCans, int[] unstoppableLocations, List<Integer> result, Map<Pair, List<Integer>> memo, int currentIndex, int currentLocation) {
-        // Base case: All gas cans used
+        // Base case; returns the found result after all the cans are used
         if (result.size() == n) {
             return result;
         }
@@ -98,13 +99,15 @@ public class MadTrucker {
                 if (canUse) {
                     result.add(i);
 
+                    //Recursive call with updated params
                     List<Integer> validSequence = findValidSequence(n, gasCans, unstoppableLocations, result, memo, currentIndex + 1, currentLocation + gasCans[i]);
 
                     if (validSequence != null) {
                         memo.put(currentState, validSequence);
                         return validSequence;
                     }
-
+                    
+                    //Backtrack and remove elements if they make an invalid sequence
                     result.remove(result.size() - 1);
                 }
             }
@@ -114,6 +117,7 @@ public class MadTrucker {
         return null;
     }
 
+    //Class needed for describing pair type of currentIndex and currentLocation
     private static class Pair {
         private int index;
         private int location;
@@ -122,16 +126,19 @@ public class MadTrucker {
             this.index = index;
             this.location = location;
         }
-
+    
+        //Overriding of class equals to assure that two pairs are equal even if they are different instances
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Pair pair = (Pair) o;
+            if (this == o) return true; //Compares normally when they're the same instance
+            if (o == null || getClass() != o.getClass()) return false; //Check if they're different classes -> returns false
+            Pair pair = (Pair) o; 
+        //Casts the object o as pair therefore returning true if they're equal even if they're different instances
             return index == pair.index &&
                     location == pair.location;
         }
 
+        //Overriding of hashCode method to ensure that equal different instances have the same hashcode generated
         @Override
         public int hashCode() {
             return Objects.hash(index, location);
