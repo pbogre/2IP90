@@ -88,12 +88,25 @@ class ContainmentsManager {
 
     Containment[] containments;
 
-    void allocateAnimal(AnimalType species) {
-        // find appropriate home, or raise exception
+    void allocateAnimal(Animal animal) {
+        for (Containment containment : containments) {
+            if (animal.canLiveWith(containment.containedAnimals)) {
+                containment.addAnimal(animal);
+                return;
+            }
+        }
+        // throw? exception
     }
 
-    void relocateAnimal(AnimalType species, int containmentNumber) {
-        // relocate if possible, or raise exception
+    void relocateAnimal(Animal animal, int containmentNumber) {
+        Containment chosenContainment = containments[containmentNumber];
+        if (animal.canLiveWith(chosenContainment.containedAnimals)) {
+            // TODO vv does this add to the actual object or just the reference of it?
+            chosenContainment.addAnimal(animal);
+            return;
+        }
+
+        // raise exception
     }
 
     void removeAnimal(String animalName) {
@@ -184,6 +197,11 @@ class Animal {
     boolean onlyOpenEnclosures;
     AnimalType[] companions;
     FoodType[] diet;
+
+    boolean canLiveWith(ArrayList<Animal> possibleCompanions) {
+        // check if this animal can live with these companions
+        return true;
+    }
 
     Animal(String name, AnimalType species) {
 
