@@ -13,7 +13,17 @@ public class MyZoo {
         this.foodsManager = new FoodsManager();
         this.containmentsManager = new ContainmentsManager();
         this.animalsManager = new AnimalsManager();
+    }
 
+    boolean introduceAnimal(String name, AnimalType species) {
+        Animal newAnimal = new Animal(name, species);
+       
+        // TODO
+        // maybe to check failure make these methods return boolean
+        animalsManager.addAnimal(name); 
+        containmentsManager.allocateAnimal(newAnimal); 
+
+        return true;
     }
 }
 
