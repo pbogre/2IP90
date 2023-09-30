@@ -328,7 +328,6 @@ class Animal {
     AnimalType[] companions;
     FoodType[] diet;
 
-    // TODO test this
     boolean canLiveWith(ArrayList<Animal> possibleCompanions) {
         
         boolean canLiveWithCompanions = true;
