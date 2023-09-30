@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 
 public class MyZoo {
@@ -9,21 +10,103 @@ public class MyZoo {
     ContainmentsManager containmentsManager;
     AnimalsManager animalsManager;
 
+    void run() {
+
+        Scanner scanner = new Scanner(System.in);
+
+        inputloop:
+        while (scanner.hasNextInt()) {
+            int command = scanner.nextInt();
+
+            switch (command) {
+                case 0: {       
+                    int animalTypeIndex = scanner.nextInt() - 1;
+                    AnimalType animalType = AnimalType.values()[animalTypeIndex];
+                    String animalName = scanner.next();
+
+                    Animal newAnimal = new Animal(animalName, animalType);
+
+                    int containmentNumber = scanner.nextInt();
+
+                    if (animalsManager.addAnimal(newAnimal) && containmentsManager.allocateAnimal(newAnimal, containmentNumber)) {
+                        System.out.print(command + " ");
+                    } else {
+                        System.out.print(command + "! ");
+                    }
+
+                    break;
+                }
+
+                case 1: {
+                    String animalName = scanner.next();
+                    int containmentNumber = scanner.nextInt();
+
+                    Animal selectedAnimal = animalsManager.getAnimalByName(animalName);
+
+                    if (containmentsManager.allocateAnimal(selectedAnimal, containmentNumber)) {
+                        System.out.print(command + " ");
+                    } else {
+                        System.out.print(command + "! ");
+                    }
+
+                    break;
+                }
+
+                case 2: {
+                    String animalName = scanner.next();
+
+                    Animal selectedAnimal = animalsManager.getAnimalByName(animalName);
+
+                    if (animalsManager.removeAnimal(selectedAnimal) && containmentsManager.removeAnimal(selectedAnimal)) {
+                        System.out.print(command + " ");
+                    } else {
+                        System.out.print(command + "! ");
+                    }
+
+                    break;
+                }
+
+                case 3: {
+                    int foodTypeIndex = scanner.nextInt() - 1;
+                    FoodType foodType = FoodType.values()[foodTypeIndex];
+                    int amount = scanner.nextInt();
+
+                    if (foodsManager.addStock(foodType, amount)) {
+                        System.out.print(command + " ");
+                    } else {
+                        System.out.print(command + "! ");
+                    }
+
+                    break;
+                }
+
+                case 4: {
+                    int foodTypeIndex = scanner.nextInt() - 1;
+                    FoodType foodType = FoodType.values()[foodTypeIndex];
+                    int amount = scanner.nextInt();
+
+                    int containmentNumber = scanner.nextInt();
+                    Containment selectedContainment = containmentsManager.containments[containmentNumber];
+
+                    if (foodsManager.feedContainment(foodType, amount, selectedContainment)) {
+                        System.out.print(command + " ");
+                    } else {
+                        System.out.print(command + "! ");
+                    }
+
+                    break;
+                }
+
+                default:
+                    break inputloop;
+            }
+        }
+    }
+
     MyZoo() {
         this.foodsManager = new FoodsManager();
         this.containmentsManager = new ContainmentsManager();
         this.animalsManager = new AnimalsManager();
-    }
-
-    boolean introduceAnimal(String name, AnimalType species) {
-        Animal newAnimal = new Animal(name, species);
-       
-        // TODO
-        // maybe to check failure make these methods return boolean
-        animalsManager.addAnimal(name); 
-        containmentsManager.allocateAnimal(newAnimal); 
-
-        return true;
     }
 }
 
@@ -60,26 +143,41 @@ class FoodsManager {
     Map<FoodType, Integer> foodsStock;
     int stockLimit = 100;
 
-    void addStock(FoodType food, int amount) {
+    boolean addStock(FoodType food, int amount) {
 
         int currentAmount = this.foodsStock.get(food);
 
         if (currentAmount + amount > stockLimit) {
-            // raise exception?
+            return false;
         }
 
         foodsStock.put(food, currentAmount + amount);
+
+        return true;
     }
 
-    void useStock(FoodType food, int amount) {
+    boolean feedContainment(FoodType food, int amount, Containment containment) {
         
         int currentAmount = this.foodsStock.get(food);
 
+        // not enough food stock
         if (currentAmount - amount < 0) {
-            // raise exception?
+            return false;
+        }
+
+        // no animals in containment
+        if (containment.containedAnimals.size() == 0) {
+            return false;
+        }
+
+        // animals in containment cannot eat selected food
+        if (!containment.canReceiveFood(food)) {
+            return false;
         }
 
         foodsStock.put(food, currentAmount - amount);
+
+        return true;
     }
 
     FoodsManager() {
@@ -98,35 +196,28 @@ class ContainmentsManager {
 
     Containment[] containments;
 
-    void allocateAnimal(Animal animal) {
-        for (Containment containment : containments) {
-            if (animal.canLiveWith(containment.containedAnimals)) {
-                containment.addAnimal(animal);
-                return;
-            }
-        }
-        // throw? exception
-    }
+    boolean allocateAnimal(Animal animal, int containmentNumber) {
 
-    void relocateAnimal(Animal animal, int containmentNumber) {
         Containment chosenContainment = containments[containmentNumber];
+
         if (animal.canLiveWith(chosenContainment.containedAnimals)) {
-            // TODO vv does this add to the actual object or just the reference of it?
             chosenContainment.addAnimal(animal);
-            return;
+
+            return true;
         }
 
-        // raise exception
+        return false;
     }
 
-    void removeAnimal(String animalName) {
+    boolean removeAnimal(Animal animal) {
         for (Containment containment : this.containments) {
-            for (Animal animal : containment.containedAnimals) {
-                if (animal.name.equals(animalName)) {
-                    containment.removeAnimalWithName(animalName);
-                }
+            if (containment.removeAnimal(animal)) {
+
+                return true;
             }
         }
+
+        return false;
     }
 
     ContainmentsManager() {
@@ -144,21 +235,43 @@ class ContainmentsManager {
 
 class AnimalsManager {
 
-    ArrayList<String> animalNames;
+    Map<String, Animal> animals;
 
-    void addAnimal(String newAnimalName) {
+    private boolean checkExists(String animalName) {
 
-        // check if an animal with this name already exists
-        for (String animalName : animalNames) {
-            if (animalName.equals(newAnimalName)) {
-                // throw exception?
-            }
+        return animals.containsKey(animalName);
+    }
+
+    Animal getAnimalByName(String animalName) {
+
+        return animals.get(animalName);
+    }
+
+    boolean addAnimal(Animal newAnimal) {
+
+        if (this.checkExists(newAnimal.name)) {
+            return false;
         }
-        animalNames.add(newAnimalName);
+
+        animals.put(newAnimal.name, newAnimal);
+
+        return true;
+    }
+
+    boolean removeAnimal(Animal selectedAnimal) {
+
+        if (this.checkExists(selectedAnimal.name)) {
+            animals.remove(selectedAnimal.name);
+
+            return true;
+        }
+
+        return false;
     }
 
     AnimalsManager() {
-        this.animalNames = new ArrayList<String>();
+
+        this.animals = new HashMap<String, Animal>();
     }
 }
 
@@ -177,13 +290,20 @@ class Containment {
         containedAnimals.add(animal);
     }
 
-    void removeAnimalWithName(String animalName) {
+    boolean removeAnimal(Animal animal) {
+
+        return containedAnimals.remove(animal);
+    }
+
+    boolean canReceiveFood(FoodType food) {
 
         for (Animal animal : containedAnimals) {
-            if (animal.name.equals(animalName)) {
-                containedAnimals.remove(animal);
+            if (!animal.canEat(food)) {
+                return false;
             }
         }
+
+        return true;
     }
 
     Containment(ContainmentType type) {
@@ -231,6 +351,20 @@ class Animal {
         }
 
         return canLiveWithCompanions;
+    }
+
+    boolean canEat(FoodType food) {
+        
+        boolean isInDiet = false;
+
+        for (FoodType possibleFood : diet) {
+            if (possibleFood.equals(food)) {
+                isInDiet = true;
+                break;
+            }
+        }
+
+        return isInDiet;
     }
 
     Animal(String name, AnimalType species) {
