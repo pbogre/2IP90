@@ -198,9 +198,29 @@ class Animal {
     AnimalType[] companions;
     FoodType[] diet;
 
+    // TODO test this
     boolean canLiveWith(ArrayList<Animal> possibleCompanions) {
-        // check if this animal can live with these companions
-        return true;
+        
+        boolean canLiveWithCompanions = true;
+
+        for (Animal possibleCompanion : possibleCompanions) {
+            boolean canLiveWithCompanion = false;
+
+            for (AnimalType preferredSpecies : this.companions) {
+                if (possibleCompanion.species.equals(preferredSpecies)) {
+                    canLiveWithCompanion = true;
+                    break;
+                }
+            }
+
+            if (!canLiveWithCompanion) {
+                canLiveWithCompanions = false;
+                break;
+            }
+
+        }
+
+        return canLiveWithCompanions;
     }
 
     Animal(String name, AnimalType species) {
