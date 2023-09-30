@@ -43,6 +43,12 @@ public class MyZoo {
 
                     Animal selectedAnimal = animalsManager.getAnimalByName(animalName);
 
+                    // animal doesn't exist
+                    if (selectedAnimal == null) {
+                        System.out.print(command + "! ");
+                        break;
+                    }
+
                     if (containmentsManager.allocateAnimal(selectedAnimal, containmentNumber)) {
                         System.out.print(command + " ");
                     } else {
@@ -56,6 +62,12 @@ public class MyZoo {
                     String animalName = scanner.next();
 
                     Animal selectedAnimal = animalsManager.getAnimalByName(animalName);
+
+                    // animal doesn't exist
+                    if (selectedAnimal == null) {
+                        System.out.print(command + "! ");
+                        break;
+                    }
 
                     if (animalsManager.removeAnimal(selectedAnimal) && containmentsManager.removeAnimal(selectedAnimal)) {
                         System.out.print(command + " ");
