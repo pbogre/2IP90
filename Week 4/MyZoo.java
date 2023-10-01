@@ -303,7 +303,7 @@ class AnimalsManager {
             return false;
         }
 
-            animals.remove(selectedAnimal.name);
+        animals.remove(selectedAnimal.name);
 
         return true;
     }
