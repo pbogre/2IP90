@@ -2,6 +2,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+/**
+ * Documentation:
+ * 
+ * @author Damyan Dimov
+ * @ID 1933248
+ * @author Pietro Bonaldo Gregori
+ * @ID 1964542
+ * 
+ * 
+ * The program manages a virtual zoo park, taking into a consideration all given parameters and wanted validation, 
+ * including what animals can live each other, what they must be fed and what not and etc.
+ * 
+ * Input:
+ * -> Command number, ranging from 0 to 4
+ * 0: Create an animal with certain unique name and assign it to a cage/enclosures
+ * 1: Move an animal by name to a different cage/enclosure
+ * 2: Remove an animal by its name
+ * 3: Buy food by certain name and specified amount
+ * 4: Feed specified food to house (cage/enclosure)
+ * 
+ * Output:
+ * -> Either N or N!
+ * N: The command with number N was executed succesfully
+ * N!: There was a unspecified error with the command with the number N
+ */
 
 
 public class MyZoo {
@@ -10,6 +35,9 @@ public class MyZoo {
     ContainmentsManager containmentsManager;
     AnimalsManager animalsManager;
 
+    /**
+     * Runs the program and gets the input
+     */
     void run() {
 
         Scanner scanner = new Scanner(System.in);
@@ -155,6 +183,13 @@ class FoodsManager {
     Map<FoodType, Integer> foodsStock;
     int stockLimit = 100;
 
+    /**
+     * 
+     * @param food, the type of food that will be added
+     * @param amount, the amount which shouldn't exceed 100
+     * @return false if the the added food will exceed limit
+     * @return true if the command executed succefully
+     */
     boolean addStock(FoodType food, int amount) {
 
         int currentAmount = this.foodsStock.get(food);
@@ -167,7 +202,14 @@ class FoodsManager {
 
         return true;
     }
-
+    /**
+     * 
+     * @param food, the food that will be given
+     * @param amount, the amount to be given
+     * @param containment, the containment to be fed
+     * @return false if there's not enough food, no animals or the animals can't eat the food
+     * @return true if the command executed succefully
+     */
     boolean feedContainment(FoodType food, int amount, Containment containment) {
         
         int currentAmount = this.foodsStock.get(food);
@@ -208,6 +250,13 @@ class ContainmentsManager {
 
     Containment[] containments;
 
+    /**
+     * 
+     * @param animal that will be allocated
+     * @param containmentNumber, the number of the cage/enclosure
+     * @return false if the animal can't live with the animals in the cage/enclosure
+     * @return true if the command was executed succefully
+     */
     boolean allocateAnimal(Animal animal, int containmentNumber) {
 
         Containment chosenContainment = containments[containmentNumber];
@@ -221,6 +270,12 @@ class ContainmentsManager {
         return false;
     }
 
+    /**
+     * 
+     * @param animal to be removed
+     * @return true if the animal was removed, i.e. the command was executed succefully
+     * @return false if there was an error, e.g. no animal was found
+     */
     boolean removeAnimal(Animal animal) {
         for (Containment containment : this.containments) {
             if (containment.removeAnimal(animal)) {
@@ -236,6 +291,7 @@ class ContainmentsManager {
         
         this.containments = new Containment[15];
 
+        //Set the first 0 to 9 to type cage and then containment
         for (int i = 0; i < 10; i++) {
             containments[i] = new Containment(ContainmentType.CAGE);
         }
@@ -340,6 +396,12 @@ class Animal {
     AnimalType[] companions;
     FoodType[] diet;
 
+    /**
+     * 
+     * @param possibleCompanions, what animals the current animal can live with
+     * @return false if it can't live in the specified enclosure, therefore there's an error
+     * @return true if the animal can live with it's companions
+     */
     boolean canLiveWith(ArrayList<Animal> possibleCompanions) {
         
         boolean canLiveWithCompanions = true;
@@ -364,6 +426,12 @@ class Animal {
         return canLiveWithCompanions;
     }
 
+    /**
+     * 
+     * @param food
+     * @return false if the animal can't eat this food
+     * @return true if the animal can eat this food
+     */
     boolean canEat(FoodType food) {
         
         boolean isInDiet = false;
@@ -378,6 +446,13 @@ class Animal {
         return isInDiet;
     }
 
+    /**
+     * 
+     * @param name
+     * @param species
+     * 
+     * Constructor that sets all restrictions for the initialised animal using switch case to determine the animal
+     */
     Animal(String name, AnimalType species) {
 
         this.name = name;
