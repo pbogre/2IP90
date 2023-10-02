@@ -16,9 +16,12 @@ public class MyZoo {
 
         Scanner scanner = new Scanner(System.in);
 
+        StringBuilder outputBuilder = new StringBuilder();
+
         inputloop:
         while (scanner.hasNextInt()) {
             int command = scanner.nextInt();
+
 
             switch (command) {
                 case 0: {       
@@ -31,9 +34,9 @@ public class MyZoo {
                     int containmentNumber = scanner.nextInt();
 
                     if (animalsManager.addAnimal(newAnimal) && containmentsManager.allocateAnimal(newAnimal, containmentNumber)) {
-                        System.out.print(command + " ");
+                        outputBuilder.append(command + " ");
                     } else {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                     }
 
                     break;
@@ -47,14 +50,14 @@ public class MyZoo {
 
                     // animal doesn't exist
                     if (selectedAnimal == null) {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                         break;
                     }
 
                     if (containmentsManager.removeAnimal(selectedAnimal) && containmentsManager.allocateAnimal(selectedAnimal, containmentNumber)) {
-                        System.out.print(command + " ");
+                        outputBuilder.append(command + " ");
                     } else {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                     }
 
                     break;
@@ -67,14 +70,14 @@ public class MyZoo {
 
                     // animal doesn't exist
                     if (selectedAnimal == null) {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                         break;
                     }
 
                     if (animalsManager.removeAnimal(selectedAnimal) && containmentsManager.removeAnimal(selectedAnimal)) {
-                        System.out.print(command + " ");
+                        outputBuilder.append(command + " ");
                     } else {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                     }
 
                     break;
@@ -86,9 +89,9 @@ public class MyZoo {
                     int amount = scanner.nextInt();
 
                     if (foodsManager.addStock(foodType, amount)) {
-                        System.out.print(command + " ");
+                        outputBuilder.append(command + " ");
                     } else {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                     }
 
                     break;
@@ -103,15 +106,17 @@ public class MyZoo {
                     Containment selectedContainment = containmentsManager.containments[containmentNumber];
 
                     if (foodsManager.feedContainment(foodType, amount, selectedContainment)) {
-                        System.out.print(command + " ");
+                        outputBuilder.append(command + " ");
                     } else {
-                        System.out.print(command + "! ");
+                        outputBuilder.append(command + "! ");
                     }
 
                     break;
                 }
 
                 default:
+                    // only print (stripped) output once program is exited
+                    System.out.println(outputBuilder.deleteCharAt(outputBuilder.length() - 1));
                     break inputloop;
             }
         }
